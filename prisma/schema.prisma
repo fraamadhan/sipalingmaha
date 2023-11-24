@@ -13,3 +13,11 @@ model User {
   email String @unique
   password String
 }
+
+model Topic {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  topicTitle String
+  topicDescription String
+  createdAt DateTime @default(now()) @db.Timestamp
+  updateAt DateTime @updatedAt @db.Timestamp
+}
