@@ -51,8 +51,8 @@ export default function Register() {
                 </form>
 
                 <p className="mt-10 text-center text-sm text-white-500">
-                    Not a member?
-                    <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"> Sign in here</a>
+                    Have an account?
+                    <a href="/" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"> Sign in here</a>
                 </p>
             </div>
         </div>
