@@ -5,18 +5,18 @@ const prisma = new PrismaClient()
 
 export async function PUT(request: any, { params }: any) {
     const {id} = params;
-
-    const {newTitle: title, newDescription: description} = await request.json()
-
+    console.log(id);
+    
+    const {newTitle, newDescription} = await request.json()
+    
     try {
-
         await prisma.topic.update({
             where: {
                 id: id
             },
             data: {
-                topicTitle: title,
-                topicDescription: description,
+                topicTitle: newTitle,
+                topicDescription: newDescription,
             }
         })
         const responseData = {status: 200, message: "Topic updated"}
