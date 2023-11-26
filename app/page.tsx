@@ -1,18 +1,29 @@
-'use client'
-import Image from 'next/image'
-import {useState} from "react"
+'use client';
+
+import { useState } from "react"
+import { signIn } from 'next-auth/react'
+import { useRouter } from "next/navigation"
 
 export default function Home() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const router = useRouter()
 
-  const registerUser = async (e: React.ChangeEvent<any>) => {
+  const SignInUser = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
-    fetch('http://localhost:3000/api/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
-    });
+
+    const signInData = await signIn('credentials', {
+      email: email,
+      password: password,
+      redirect: false
+    })
+
+    if (signInData?.error) {
+      console.log(signInData.error);
+    } else {
+      router.replace('/dashboard')
+    }
+
   };
 
   return (
@@ -23,7 +34,7 @@ export default function Home() {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6" onSubmit={registerUser}>
+        <form className="space-y-6" onSubmit={SignInUser}>
           <div>
             <label htmlFor="email" className="block text-sm font-medium leading-6 text-white-900">Email address</label>
             <div className="mt-2">
