@@ -13,6 +13,8 @@ export async function POST(request: any) {
                 topicDescription: description,
             },
         })
+        console.log(topic);
+        
         const responseData = { status: 201, message: "Topics created successfully", topic}
         return NextResponse.json(responseData)
     } catch(err) {

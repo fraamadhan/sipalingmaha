@@ -1,17 +1,32 @@
 'use client'
-import {useState} from "react"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 export default function Register() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    
+    const router = useRouter();
+
     const registerUser = async (e: React.ChangeEvent<any>) => {
         e.preventDefault();
-        fetch('http://localhost:3000/api/register', {
+        const response = await fetch('http://localhost:3000/api/user', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({email, password})})
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        })
+
+        if (response.ok) {
+            const responseData = await response.json()
+            if (responseData.status !== 407) {
+                router.push('/');
+            }
+
+        } else {
+            console.error('Registration failed');
+        }
+
     };
+
 
     return (
         <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -25,9 +40,9 @@ export default function Register() {
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium leading-6 text-white-900">Email address</label>
                         <div className="mt-2">
-                            <input type="email" id="email" name="email" autoComplete="email" required className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-3" 
-                            value={email}
-                            onChange={(e)=> setEmail(e.target.value)}/>
+                            <input type="email" id="email" name="email" autoComplete="email" required className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-3"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)} />
                         </div>
                     </div>
 
@@ -39,9 +54,9 @@ export default function Register() {
                             </div>
                         </div>
                         <div className="mt-2">
-                            <input id="password" name="password" type="password" autoComplete="current-password" required className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-3" 
-                            value={password}
-                            onChange={(e)=> setPassword(e.target.value)}/>
+                            <input id="password" name="password" type="password" autoComplete="current-password" required className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-3"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)} />
                         </div>
                     </div>
 
