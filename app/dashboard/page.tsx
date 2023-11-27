@@ -2,7 +2,6 @@ import React from 'react'
 import TopicsList from '../components/topicsList'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '../lib/auth'
-import { User } from '../components/User'
 
 export default async function Dashboard() {
 

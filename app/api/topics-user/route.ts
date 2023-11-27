@@ -6,14 +6,24 @@ import { NextResponse } from "next/server";
 export async function GET() {
 
     try {
+
+        let topic
         const session = await getServerSession(authOptions)
-        const id = session?.user.id
+        let id = session?.user.id
         
-        const topic = await prisma.topic.findMany({
-            where: {
-                userId: id,
-            },
-        })
+        if (session?.user.role === "REGULAR") {
+            topic = await prisma.topic.findMany({
+                where: {
+                    userId: id
+                }
+            })
+            const responseData = {status: 200, message: "data found", topic}
+
+            return NextResponse.json(responseData)
+        }
+
+        topic = await prisma.topic.findMany()
+
         const responseData = {status: 200, message: "data found", topic}
 
         return NextResponse.json(responseData)
