@@ -1,19 +1,34 @@
+import { authOptions } from "@/app/lib/auth";
 import { PrismaClient } from "@prisma/client"
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
 export async function POST(request: any) {
+
+    const session = await getServerSession(authOptions)
+
     const {title, description} = await request.json();
+
+    if (!!session?.user &&
+        session?.user.role !== "REGULAR" &&
+        session?.user.role !== "ADMIN") {
+            return NextResponse.json({status: 401, message: "Who are you?"})
+        }
 
     try {
         const topic = await prisma.topic.create({
             data: {
                 topicTitle: title,
                 topicDescription: description,
+                user: {
+                    connect: {
+                        id: "65643ee8f1ca7aa4dabebf81"
+                    }
+                }
             },
         })
-        console.log(topic);
         
         const responseData = { status: 201, message: "Topics created successfully", topic}
         return NextResponse.json(responseData)
@@ -27,8 +42,24 @@ export async function POST(request: any) {
 
 export async function GET() {
 
+    const session = await getServerSession(authOptions)
+
+    if (!!session?.user &&
+        session?.user.role !== "REGULAR" &&
+        session?.user.role !== "ADMIN") {
+            return NextResponse.json({status: 401, message: "Who are you?"})
+        }
+
     try {
-        const topics = await prisma.topic.findMany()
+        const topics = await prisma.topic.findMany({
+            include: {
+                user: {
+                    select: {
+                        email: true,
+                    },
+                }
+            }
+        })
         const responseData = {status: 200, message: "Topics fetched successfully euy", topics}
         return NextResponse.json(responseData)
     } catch(err) {
@@ -38,6 +69,14 @@ export async function GET() {
 }
 
 export async function DELETE(request: any) {
+
+    const session = await getServerSession(authOptions)
+    if (!!session?.user &&
+        session?.user.role !== "REGULAR" &&
+        session?.user.role !== "ADMIN") {
+            return NextResponse.json({status: 401, message: "Who are you?"})
+        }
+
     const id = request.nextUrl.searchParams.get("id");
 
     try {

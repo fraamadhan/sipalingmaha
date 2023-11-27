@@ -1,8 +1,10 @@
 'use client'
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useToast } from "@/components/ui/use-toast"
 
 export default function Register() {
+    const {toast} = useToast()
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const router = useRouter();
@@ -17,11 +19,22 @@ export default function Register() {
 
         if (response.ok) {
             const responseData = await response.json()
-            if (responseData.status !== 407) {
+            if (responseData.status === 201) {
                 router.push('/');
+            } else if (responseData.status === 501) {
+                toast({
+                    title: "Error euy!",
+                    description: "Something aya nu wrong",
+                    variant: 'destructive'
+                  })
             }
 
         } else {
+            toast({
+                title: "Error euy!",
+                description: "Something aya nu wrong",
+                variant: 'destructive'
+              })
             console.error('Registration failed');
         }
 

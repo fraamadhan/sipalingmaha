@@ -3,8 +3,10 @@
 import { useState } from "react"
 import { signIn } from 'next-auth/react'
 import { useRouter } from "next/navigation"
+import { useToast } from "@/components/ui/use-toast";
 
-export default function Home() {
+export default function SignIn() {
+  const {toast} = useToast()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const router = useRouter()
@@ -18,10 +20,16 @@ export default function Home() {
       redirect: false
     })
 
-    if (signInData?.error) {
-      console.log(signInData.error);
+    
+    if (signInData?.error) { 
+      toast({
+        title: "Error euy!",
+        description: "Something aya nu wrong",
+        variant: 'destructive'
+      })
     } else {
-      router.replace('/dashboard')
+      router.refresh()
+      router.push('/dashboard')
     }
 
   };
@@ -68,6 +76,11 @@ export default function Home() {
           <a href="/register" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"> Sign up here</a>
         </p>
       </div>
+      
+      <div className="flex items-center justify-center">
+        <button onClick={() => router.push('/dashboard')} className="flex w-fit rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 my-10">Go To Dashboard</button>
+      </div>
+
     </div>
   );
 };

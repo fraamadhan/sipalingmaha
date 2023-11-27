@@ -12,7 +12,7 @@ export const authOptions: NextAuthOptions = {
     pages: {
         signIn: '/'
     },
-    secret: process.env.NEXTAUTH_URL,
+    secret: process.env.NEXTAUTH_SECRET,
     providers: [
         CredentialsProvider({
           name: "Credentials",
@@ -43,8 +43,34 @@ export const authOptions: NextAuthOptions = {
             return {
                 id: existingUser.id,
                 email: existingUser.email,
+                role: existingUser.role,
             }
           }
         })
-    ]
+    ],
+    callbacks: {
+        async session({session, user, token}) {
+            
+            return {
+                ...session,
+                user: {
+                    ...session.user,
+                    id: token.id,
+                    email: token.email,
+                    role: token.role,
+                }
+            }
+        },
+        async jwt({token, user }) {
+            if (user) {
+                return {
+                    ...token,
+                    id: user.id,
+                    email: user.email,
+                    role: user.role,
+                }
+            }
+            return token
+        }
+    }
 }

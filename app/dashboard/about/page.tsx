@@ -1,8 +1,11 @@
+import { authOptions } from '@/app/lib/auth'
+import { getServerSession } from 'next-auth'
 import React from 'react'
 
 export default function About() {
+  const session = getServerSession(authOptions)
   return (
-
+    
     <div className="h-fit flex justify-center items-center mt-28">
       <link rel="stylesheet" href="https://demos.creative-tim.com/notus-js/assets/styles/tailwind.css" />
       <link rel="stylesheet" href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" />

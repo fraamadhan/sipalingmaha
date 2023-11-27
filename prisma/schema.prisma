@@ -12,8 +12,10 @@ model User {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   email String @unique
   password String
+  role Role @default(REGULAR)
   createdAt DateTime? @default(now()) 
   updateAt DateTime? @updatedAt 
+  topics Topic[]
 }
 
 model Topic {
@@ -21,5 +23,12 @@ model Topic {
   topicTitle String
   topicDescription String
   createdAt DateTime @default(now()) @db.Timestamp
-  updateAt DateTime @updatedAt @db.Timestamp
+  updateAt DateTime @updatedAt @db.Timestamp  
+  user User @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
+}
+
+enum Role {
+  ADMIN
+  REGULAR
 }

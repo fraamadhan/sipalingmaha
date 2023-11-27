@@ -5,7 +5,6 @@ const prisma = new PrismaClient()
 
 export async function PUT(request: any, { params }: any) {
     const {id} = params;
-    console.log(id);
     
     const {newTitle, newDescription} = await request.json()
     
@@ -17,6 +16,13 @@ export async function PUT(request: any, { params }: any) {
             data: {
                 topicTitle: newTitle,
                 topicDescription: newDescription,
+            },
+            include: {
+                user: {
+                    select: {
+                        email: true,
+                    },
+                }
             }
         })
         const responseData = {status: 200, message: "Topic updated"}
@@ -35,6 +41,9 @@ export async function GET(request: any, {params}: any) {
         const topic = await prisma.topic.findFirst({
             where: {
                 id: id,
+            },
+            include: {
+                user: true,
             }
         })
 
