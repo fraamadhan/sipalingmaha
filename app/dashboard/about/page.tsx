@@ -2,8 +2,10 @@ import { authOptions } from '@/app/lib/auth'
 import { getServerSession } from 'next-auth'
 import React from 'react'
 
-export default function About() {
-  const session = getServerSession(authOptions)
+export default async function About() {
+  const session = await getServerSession(authOptions)
+  const email = session?.user?.email
+
   return (
     
     <div className="h-fit flex justify-center items-center mt-28">
@@ -54,7 +56,7 @@ export default function About() {
                 </div>
                 <div className="text-center mt-12">
                   <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2">
-                    Alexandra Daddario
+                    {email}
                   </h3>
                   <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
                     <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>

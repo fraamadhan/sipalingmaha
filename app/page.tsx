@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from "react"
-import { signIn } from 'next-auth/react'
-import { useRouter } from "next/navigation"
+import { signIn, useSession } from 'next-auth/react'
+import { redirect, useRouter } from "next/navigation"
 import { useToast } from "@/components/ui/use-toast";
 
 export default function SignIn() {
@@ -10,6 +10,11 @@ export default function SignIn() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const router = useRouter()
+  const session = useSession()
+
+  if (session) {
+    redirect('/dashboard')
+  }
 
   const SignInUser = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
@@ -33,7 +38,6 @@ export default function SignIn() {
     }
 
   };
-
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
