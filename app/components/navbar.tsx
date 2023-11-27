@@ -1,7 +1,11 @@
 import React from "react";
 import Link from "next/link";
+import { authOptions } from "../lib/auth";
+import { getServerSession } from "next-auth";
+import UserAccountNav from "./UserAccountNav";
 
-const Navbar = () => {
+const Navbar = async () => {
+    const session = await getServerSession(authOptions)
     return (
         <nav className="bg-white border-gray-200 dark:bg-gray-900 p-2 mt-0 fixed w-full z-10 top-0">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -33,6 +37,16 @@ const Navbar = () => {
                             <a href="/dashboard/addTopic" className="bg-white text-black p-2 rounded hover:bg-green-900
                              hover:text-green-200 hover">Add Topic</a>
                         </li>
+                        {session?.user ? (
+                            <li>
+                                <UserAccountNav />
+                            </li>
+                        ) : (
+                            <li>
+                                <a href="/" className="bg-white text-black p-2 rounded hover:bg-red-900
+                                hover:text-red-200 hover">Sign-in</a>
+                            </li>
+                        )}
                     </ul>
                 </div>
             </div>
