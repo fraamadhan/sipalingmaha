@@ -10,6 +10,7 @@ export async function POST(request: any) {
     const session = await getServerSession(authOptions)
 
     const {title, description} = await request.json();
+    const id = session?.user.id
 
     if (!!session?.user &&
         session?.user.role !== "REGULAR" &&
@@ -24,7 +25,7 @@ export async function POST(request: any) {
                 topicDescription: description,
                 user: {
                     connect: {
-                        id: "65643ee8f1ca7aa4dabebf81"
+                        id: id
                     }
                 }
             },

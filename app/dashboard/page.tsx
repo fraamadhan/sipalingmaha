@@ -2,11 +2,12 @@ import React from 'react'
 import TopicsList from '../components/topicsList'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '../lib/auth'
-import { User } from '../components/User'
+import { useEffect } from 'react'
 
 export default async function Dashboard() {
 
     const session = await getServerSession(authOptions)
+
     
     if (session?.user) {
         return (
